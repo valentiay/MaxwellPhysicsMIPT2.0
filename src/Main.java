@@ -1,10 +1,9 @@
-import IdealGas.ExperimentManager;
-
+import experiment.Boltzmann;
 
 
 class Main {
     public static void main(String[] args) {
-        ExperimentManager experimentManager = new ExperimentManager();
-        experimentManager.run();
+        Boltzmann boltzmann = new Boltzmann();
+        boltzmann.start(100, 5000);
     }
 }
