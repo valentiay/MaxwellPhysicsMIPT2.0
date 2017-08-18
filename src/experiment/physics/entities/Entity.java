@@ -4,16 +4,16 @@ import java.awt.*;
 
 public interface Entity {
     /**
-     * Updates entity info
+     * Updates entity condition.
      *
      * @param dt time interval since last update
      */
     void update(double dt);
 
     /**
-     * Draws entity on swing graphics context
+     * Draws entity on swing graphics context.
      *
      * @param g graphics context
      */
-    void render(Graphics2D g);
+    void render(Graphics g);
 }

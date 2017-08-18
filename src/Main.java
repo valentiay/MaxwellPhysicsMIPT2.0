@@ -1,9 +1,11 @@
-import experiment.Boltzmann;
+import experiment.Experiment;
+import experiment.experimentExamples.CollidingAtomsExperiment;
+import experiment.settings.BaseSettings;
 
 
 class Main {
     public static void main(String[] args) {
-        Boltzmann boltzmann = new Boltzmann();
-        boltzmann.start(100, 5000);
+        Experiment experiment = new CollidingAtomsExperiment();
+        experiment.run(new BaseSettings());
     }
 }

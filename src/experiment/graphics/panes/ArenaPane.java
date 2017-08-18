@@ -1,8 +1,6 @@
 package experiment.graphics.panes;
 
 
-import experiment.Boltzmann;
-import experiment.graphics.painters.AtomsPainter;
 import experiment.physics.entities.Entity;
 
 import javax.swing.*;
@@ -13,20 +11,15 @@ import java.util.List;
 
 public class ArenaPane extends JPanel {
 
-    public final int HEIGHT;
-    public final int WIDTH ;
+    private final int HEIGHT;
+    private final int WIDTH ;
 
-    private final List<Entity> atoms;
+    private final List<Entity> entities;
 
-    private final experiment.graphics.painters.Painter atomsPainter;
-    private final experiment.graphics.painters.Painter wallPainter;
-
-    public ArenaPane(List<Entity> atoms) {
-        this.HEIGHT = Boltzmann.HEIGHT;
-        this.WIDTH = Boltzmann.WIDTH;
-        this.atoms = atoms;
-        this.atomsPainter = new AtomsPainter();
-        this.wallPainter = null;
+    public ArenaPane(List<Entity> entities, int width, int height) {
+        this.WIDTH = width;
+        this.HEIGHT = height;
+        this.entities = entities;
     }
 
     @Override
@@ -40,10 +33,8 @@ public class ArenaPane extends JPanel {
 
         setBackground(Color.BLACK);
 
-        atomsPainter.paint(g, atoms);
-
-        if (wallPainter != null) {
-            wallPainter.paint(g);
+        for (Entity entity : entities) {
+            entity.render(g);
         }
     }
 }

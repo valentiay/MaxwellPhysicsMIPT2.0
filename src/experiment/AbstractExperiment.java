@@ -1,28 +1,52 @@
 package experiment;
 
+import experiment.graphics.frames.SceneFrame;
 import experiment.physics.entities.Entity;
+import experiment.settings.Settings;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractExperiment implements Experiment {
 
-    private List<Entity> entities;
+    /** List of entities on the scene. */
+    protected List<Entity> entities;
 
+    /** Experiment parameters. */
+    protected Settings settings;
+
+    /**
+     * Flag which is true if experiment is running and false otherwise.
+     * Used for stopping experiment thread.
+     */
     private boolean isRunning = false;
 
+    /**
+     * Object representing window where the scene is drawn.
+     */
+    private SceneFrame sceneFrame;
+
+    /**
+     * Configures experiment and starts experiment loop.
+     *
+     * @param settings experiment parameters.
+     *
+     * @see Settings
+     * @see AbstractExperiment#buildScene()
+     */
     @Override
-    public void run(Settings settings) {
-        Thread experimentThread = new Thread(() -> {
+    public final void run(Settings settings) {
+        this.settings = settings;
+        Thread thread = new Thread(() -> {
             isRunning = true;
 
             entities = new ArrayList<>();
-//            final ArenaFrame arena;
-//            final Physics physics;
-//            arena = new ArenaFrame(atoms);
-//            physics = new Physics(atoms, new AtomProcessorBoltzmann());
-//
-//
+
+            sceneFrame = new SceneFrame(entities, settings.getWidth(), settings.getHeight());
+            sceneFrame.setVisible(true);
+
+            buildScene();
+
             double sinceGasUpdate = 0;
             double gasTimer = System.currentTimeMillis();
 
@@ -31,41 +55,60 @@ public abstract class AbstractExperiment implements Experiment {
                 sinceGasUpdate += System.currentTimeMillis() - gasTimer;
                 gasTimer  = System.currentTimeMillis();
 
-                boolean gasWasUpdated = false;
-                while (sinceGasUpdate > settings.dt) {
-                    update(settings.dt);
-                    sinceGasUpdate -= settings.dt;
-                    gasWasUpdated = true;
+                boolean sceneWasUpdated = false;
+                while (sinceGasUpdate > settings.getDt()) {
+                    update(settings.getDt());
+                    sinceGasUpdate -= settings.getDt();
+                    sceneWasUpdated = true;
                 }
 
-                if (gasWasUpdated) {
+                if (sceneWasUpdated) {
                     render();
                 }
             }
-//            arena.dispose();
 
+            sceneFrame.dispose();
+
+            this.settings = null;
+            entities = null;
+            sceneFrame = null;
         });
+        thread.run();
     }
 
     @Override
-    public void stop() {
+    public final void stop() {
         isRunning = false;
     }
 
     @Override
-    public List<Entity> getEntities() {
+    public final List<Entity> getEntities() {
         return entities;
     }
 
+    /**
+     * Fills the scene with entities. This method is called once before the experiment loop starts.
+     */
     abstract protected void buildScene();
 
+    /**
+     * Updates the scene every <code>dt</code> milliseconds. By default
+     * calls {@link Entity#update(double)} method of every entity on the scene.
+     *
+     * @param dt time in milliseconds between two scene updates.
+     * @see Entity#update(double)
+     */
     protected void update(double dt) {
         for (Entity entity : entities) {
             entity.update(dt);
         }
     }
 
-    protected void render() {
-
+    /**
+     * Redraws scene window
+     */
+    private void render() {
+        sceneFrame.pack();
+        sceneFrame.repaint();
     }
 }

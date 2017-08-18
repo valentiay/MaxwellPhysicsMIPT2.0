@@ -1,6 +1,7 @@
 package experiment;
 
 import experiment.physics.entities.Entity;
+import experiment.settings.Settings;
 
 import java.util.List;
 
