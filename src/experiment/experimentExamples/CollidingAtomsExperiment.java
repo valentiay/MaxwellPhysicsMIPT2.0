@@ -37,37 +37,23 @@ public class CollidingAtomsExperiment extends AbstractExperiment {
 
     /**
      * Fills the scene with atoms having random velocity and spread randomly.
-     * Initializes atom grid. Grid cell size is chosen so that number of cells was equal to
-     * number of atoms.
+     * Initializes grid by calling {@link #initializeGrid()} method.
+     *
+     * @see CollidingAtomsExperiment#initializeGrid()
      */
     @Override
     protected void buildScene() {
         baseSettings = castToBaseSettings(this.settings);
         atoms = new LinkedList<>();
 
-        int cellSize = Math.max(
-                (int)Math.sqrt(baseSettings.getWidth() * baseSettings.getHeight() / baseSettings.getNumberOfAtoms()),
-                8 * baseSettings.getRadius()
+        initializeGrid();
+
+        generateRectangleOfAtoms(
+                0, 0,
+                baseSettings.getWidth(),
+                baseSettings.getHeight(),
+                baseSettings.getNumberOfAtoms()
         );
-
-        grid = new Grid(baseSettings.getWidth(), baseSettings.getHeight(), cellSize);
-        Random random = new Random(System.currentTimeMillis());
-        for (int i = 0; i < baseSettings.getNumberOfAtoms(); ++i) {
-            int x = random.nextInt(baseSettings.getWidth());
-            int y = random.nextInt(baseSettings.getHeight());
-            double cos = 2 * Math.random() - 1;
-            double sin = (random.nextInt() % 2 == 0)?(-1):(1)*Math.sqrt(1 - cos * cos);
-
-            Atom atom = new Atom(
-                    x, y,
-                    cos * baseSettings.getVelocity(),
-                    sin * baseSettings.getVelocity(),
-                    baseSettings.getRadius()
-            );
-
-            entities.add(atom);
-            atoms.add(atom);
-        }
     }
 
     /**
@@ -178,5 +164,48 @@ public class CollidingAtomsExperiment extends AbstractExperiment {
         } catch (ClassCastException e) {
             throw new SettingsException("Settings is not instance of BaseSettings");
         }
+    }
+
+    /**
+     * Generates atoms inside a rectangle. Adds atoms into {@link #entities} and
+     * {@link #atoms} lists.
+     *
+     * @param rectX x coordinate of top left corner of rectangle.
+     * @param rectY y coordinate of top left corner of rectangle.
+     * @param width rectangle width.
+     * @param height rectangle height.
+     * @param numberOfAtoms number of atoms to generate.
+     */
+    protected void generateRectangleOfAtoms(int rectX, int rectY, int width, int height, int numberOfAtoms) {
+        Random random = new Random(System.currentTimeMillis());
+        for (int i = 0; i < numberOfAtoms; ++i) {
+            int x = random.nextInt(width - 2 * baseSettings.getRadius()) + rectX + baseSettings.getRadius();
+            int y = random.nextInt(height - 2 * baseSettings.getRadius()) + rectY + baseSettings.getRadius();
+            double cos = 2 * Math.random() - 1;
+            double sin = (random.nextInt() % 2 == 0)?(-1):(1)*Math.sqrt(1 - cos * cos);
+
+            Atom atom = new Atom(
+                    x, y,
+                    cos * baseSettings.getVelocity(),
+                    sin * baseSettings.getVelocity(),
+                    baseSettings.getRadius()
+            );
+
+            entities.add(atom);
+            atoms.add(atom);
+        }
+    }
+
+    /**
+     * Initializes atom grid. Grid cell size is chosen so that number of cells was equal to
+     * number of atoms but not less than 8*radius.
+     */
+    protected void initializeGrid() {
+        int cellSize = Math.max(
+                (int)Math.sqrt(baseSettings.getWidth() * baseSettings.getHeight() / baseSettings.getNumberOfAtoms()),
+                8 * baseSettings.getRadius()
+        );
+
+        grid = new Grid(baseSettings.getWidth(), baseSettings.getHeight(), cellSize);
     }
 }

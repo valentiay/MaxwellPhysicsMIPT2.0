@@ -1,7 +1,6 @@
 package experiment.experimentExamples;
 
 import experiment.exceptions.SettingsException;
-import experiment.physics.Grid;
 import experiment.physics.entities.atoms.AccelerationAtom;
 import experiment.physics.entities.atoms.Atom;
 import experiment.settings.GravitySettings;
@@ -24,12 +23,8 @@ public class GravityExperiment extends CollidingAtomsExperiment {
         baseSettings = castToBaseSettings(this.settings);
         atoms = new LinkedList<>();
 
-        int cellSize = Math.max(
-                (int)Math.sqrt(gravitySettings.getWidth() * gravitySettings.getHeight() / gravitySettings.getNumberOfAtoms()),
-                8 * gravitySettings.getRadius()
-        );
+        initializeGrid();
 
-        grid = new Grid(gravitySettings.getWidth(), gravitySettings.getHeight(), cellSize);
         Random random = new Random(System.currentTimeMillis());
         for (int i = 0; i < gravitySettings.getNumberOfAtoms(); ++i) {
             int x = random.nextInt(gravitySettings.getWidth());
