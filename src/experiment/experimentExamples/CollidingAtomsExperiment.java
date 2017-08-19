@@ -26,7 +26,7 @@ public class CollidingAtomsExperiment extends AbstractExperiment {
      * @see BaseSettings
      * @see CollidingAtomsExperiment#buildScene()
      */
-    private BaseSettings baseSettings;
+    protected BaseSettings baseSettings;
 
     /**
      * Scene grid. Used to optimise atom collision procession.
@@ -165,7 +165,7 @@ public class CollidingAtomsExperiment extends AbstractExperiment {
     }
 
     /**
-     * Down casts Settings class to BaseSettings class. If cast is
+     * Down casts Settings class to {@link BaseSettings} class. If cast is
      * unacceptable throws SettingsException
      *
      * @param settings settings passed to {@link experiment.Experiment#run(Settings)} method

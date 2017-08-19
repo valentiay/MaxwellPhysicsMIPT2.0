@@ -1,11 +1,11 @@
 import experiment.Experiment;
-import experiment.experimentExamples.CollidingAtomsExperiment;
-import experiment.settings.BaseSettings;
+import experiment.experimentExamples.GravityExperiment;
+import experiment.settings.GravitySettings;
 
 
 class Main {
     public static void main(String[] args) {
-        Experiment experiment = new CollidingAtomsExperiment();
-        experiment.run(new BaseSettings());
+        Experiment experiment = new GravityExperiment();
+        experiment.run(new GravitySettings());
     }
 }

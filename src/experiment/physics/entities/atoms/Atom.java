@@ -10,20 +10,23 @@ import java.awt.*;
  */
 public class Atom implements Entity {
 
-    /** x coordinate of particle center. */
+    /** x coordinate of particle center */
     public double x;
 
-    /** y coordinate of particle center. */
+    /** y coordinate of particle center */
     public double y;
 
-    /** Horizontal component of velocity. */
+    /** Horizontal component of velocity */
     public double vx;
 
-    /** Vertical component of velocity. */
+    /** Vertical component of velocity */
     public double vy;
 
-    /** Particle radius. */
+    /** Particle radius */
     private int r;
+
+    /** Color of circle representing particle */
+    private Color color = Color.red;
 
     /**
      * Constructs atom with passed parameters.
@@ -60,7 +63,17 @@ public class Atom implements Entity {
      */
     @Override
     public void render(Graphics g) {
-        g.setColor(Color.red);
+        g.setColor(color);
         g.fillOval((int)x - r, (int)y - r, 2 * r, 2 * r);
+    }
+
+    /** <code>color</code> getter */
+    public Color getColor() {
+        return color;
+    }
+
+    /** <code>color</code> getter */
+    public void setColor(Color color) {
+        this.color = color;
     }
 }
