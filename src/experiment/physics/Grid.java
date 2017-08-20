@@ -118,7 +118,7 @@ public class Grid {
      * Returns list of atoms contained in neighbour cells. Major method to optimize
      * collision processing. <b>It is expected that cells would be processed top-left
      * corner line by line, so functions is returning atoms only in current cell,
-     * right, right-bottom, and bottom cells.</b>
+     * right, right-bottom, bottom, and left-bottom cells.</b>
      *
      * @param posX x position of the cell.
      * @param posY y position of the cell.
@@ -131,6 +131,11 @@ public class Grid {
             throw new GridException("Index out of grid bounds");
         }
 
+        if (posX > 0) {
+            if (posY < gridHeight - 1) {
+                neighbours.addAll(getAt(posX - 1, posY + 1));
+            }
+        }
         neighbours.addAll(getAt(posX, posY));
         if (posY < gridHeight - 1) {
             neighbours.addAll(getAt(posX, posY + 1));
